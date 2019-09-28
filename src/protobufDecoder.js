@@ -115,10 +115,15 @@ export function decodeProto(buffer) {
 
 export function typeToString(type) {
   switch (type) {
-    case TYPES.VARINT: return "varint";
-    case TYPES.STRING: return "string";
-    case TYPES.FIXED32: return "fixed32";
-    case TYPES.FIXED64: return "fixed64";
-    default: return "unknown";
+    case TYPES.VARINT:
+      return "varint";
+    case TYPES.STRING:
+      return "string";
+    case TYPES.FIXED32:
+      return "fixed32";
+    case TYPES.FIXED64:
+      return "fixed64";
+    default:
+      return "unknown";
   }
 }

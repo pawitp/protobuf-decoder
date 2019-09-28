@@ -1,4 +1,4 @@
-import React, {Fragment} from "react";
+import React, { Fragment } from "react";
 import ProtobufPart from "./ProtobufPart";
 import { Table } from "semantic-ui-react";
 import { bufferToPrettyHex } from "./hexUtils";
