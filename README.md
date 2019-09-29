@@ -1,3 +1,7 @@
+[![CircleCI](https://circleci.com/gh/pawitp/protobuf-decoder.svg?style=svg)](https://circleci.com/gh/pawitp/protobuf-decoder)
+[![codecov](https://codecov.io/gh/pawitp/protobuf-decoder/branch/master/graph/badge.svg)](https://codecov.io/gh/pawitp/protobuf-decoder)
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
