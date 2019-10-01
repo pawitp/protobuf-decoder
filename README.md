@@ -1,72 +1,51 @@
+# Protobuf Decoder
+
 [![CircleCI](https://circleci.com/gh/pawitp/protobuf-decoder.svg?style=svg)](https://circleci.com/gh/pawitp/protobuf-decoder)
 [![codecov](https://codecov.io/gh/pawitp/protobuf-decoder/branch/master/graph/badge.svg)](https://codecov.io/gh/pawitp/protobuf-decoder)
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat)](LICENSE)
 
+Protobuf Decoder is a web application based on React to decode and visualize Protobuf data (hex) into prettified table layout.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+> For live version, please visit: https://protobuf-decoder.netlify.com/
 
-## Available Scripts
+## Getting Started
 
-In the project directory, you can run:
+To start application locally, use [Yarn](https://yarnpkg.com) to get the dependencies and start the application.
 
-### `npm start`
+> $ yarn install
+>$ yarn start
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Once the application started, open http://localhost:3000 on web browser.
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+## Usage
 
-### `npm test`
+Paste Protobuf data in hex format, then press **Decode** button.
+![screenshot](https://raw.githubusercontent.com/pugkung/protobuf-decoder/master/screenshot.jpg)
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Example Data
 
-### `npm run build`
+**Input**
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+> 0a 2f 0a 08 4a 6f 68 6e 20 44 6f 65 10 01 1a 10 6a 6f 68 6e 40 65 78 61 6d 70 6c 65 2e 63 6f 6d 22 0f 0a 0b 31 31 31 2d 32 32 32 2d 33 33 33 10 01 0a 1e 0a 08 4a 61 6e 65 20 44 6f 65 10 02 1a 10 6a 61 6e 65 40 65 78 61 6d 70 6c 65 2e 63 6f 6d
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+**Output**
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+<table>
+<tr><th>Field Number</th><th>Type</th><th>Content</th></tr>
+<tr><td>1</td><td>string</td><td><table>
+     <tr><th>Field Number</th><th>Type</th><th>Content</th></tr>
+     <tr><td>1</td><td>string</td><td>John Doe</td></tr>
+     <tr><td>2</td><td>varint</td><td>1</td></tr>
+     <tr><td>3</td><td>string</td><td>john@example.com</td></tr>
+     <tr><td>4</td><td>string</td><td><table>
+         <tr><th>Field Number</th><th>Type</th><th>Content</th></tr>
+         <tr><td>1</td><td>string</td><td>111-222-333</td></tr>
+         <tr><td>2</td><td>varint</td><td>1</td></tr>
+         </table></td></tr>
+    </table></td></tr>
+<tr><td>1</td><td>string</td><td><table>
+     <tr><th>Field Number</th><th>Type</th><th>Content</th></tr>
+     <tr><td>1</td><td>string</td><td>Jane Doe</td></tr>
+     <tr><td>2</td><td>varint</td><td>2</td></tr>
+     <tr><td>3</td><td>string</td><td>jane@example.com</td></tr>
+</table>
