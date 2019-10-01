@@ -12,15 +12,17 @@ Protobuf Decoder is a web application based on React to decode and visualize Pro
 
 To start application locally, use [Yarn](https://yarnpkg.com) to get the dependencies and start the application.
 
-> $ yarn install
->$ yarn start
+```
+$ yarn install
+$ yarn start
+```
 
 Once the application started, open http://localhost:3000 on web browser.
 
 ## Usage
 
 Paste Protobuf data in hex format, then press **Decode** button.
-![screenshot](https://raw.githubusercontent.com/pugkung/protobuf-decoder/master/screenshot.jpg)
+<img src="https://raw.githubusercontent.com/pugkung/protobuf-decoder/master/screenshot.jpg" alt="screenshot" width="500"/>
 
 ## Example Data
 
