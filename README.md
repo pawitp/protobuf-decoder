@@ -22,7 +22,6 @@ Once the application started, open http://localhost:3000 on web browser.
 ## Usage
 
 Paste Protobuf data in hex format, then press **Decode** button.
-<img src="https://raw.githubusercontent.com/pugkung/protobuf-decoder/master/screenshot.jpg" alt="screenshot" width="500"/>
 
 ## Example Data
 
@@ -32,22 +31,4 @@ Paste Protobuf data in hex format, then press **Decode** button.
 
 **Output**
 
-<table>
-<tr><th>Field Number</th><th>Type</th><th>Content</th></tr>
-<tr><td>1</td><td>string</td><td><table>
-     <tr><th>Field Number</th><th>Type</th><th>Content</th></tr>
-     <tr><td>1</td><td>string</td><td>John Doe</td></tr>
-     <tr><td>2</td><td>varint</td><td>1</td></tr>
-     <tr><td>3</td><td>string</td><td>john@example.com</td></tr>
-     <tr><td>4</td><td>string</td><td><table>
-         <tr><th>Field Number</th><th>Type</th><th>Content</th></tr>
-         <tr><td>1</td><td>string</td><td>111-222-333</td></tr>
-         <tr><td>2</td><td>varint</td><td>1</td></tr>
-         </table></td></tr>
-    </table></td></tr>
-<tr><td>1</td><td>string</td><td><table>
-     <tr><th>Field Number</th><th>Type</th><th>Content</th></tr>
-     <tr><td>1</td><td>string</td><td>Jane Doe</td></tr>
-     <tr><td>2</td><td>varint</td><td>2</td></tr>
-     <tr><td>3</td><td>string</td><td>jane@example.com</td></tr>
-</table>
+<img src="https://raw.githubusercontent.com/pugkung/protobuf-decoder/master/screenshot.jpg" alt="screenshot" width="500"/>
