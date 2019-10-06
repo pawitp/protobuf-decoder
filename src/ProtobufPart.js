@@ -1,6 +1,7 @@
-import React, { Fragment } from "react";
+import React from "react";
 import { Table } from "semantic-ui-react";
 import { decodeProto, TYPES, typeToString } from "./protobufDecoder";
+import { decodeFixed32 } from "./protobufPartDecoder";
 import ProtobufDisplay from "./ProtobufDisplay";
 
 function ProtobufVarintPart(props) {
@@ -32,31 +33,14 @@ function ProtobufFixed64Part(props) {
 
 function ProtobufFixed32Part(props) {
   const { value } = props;
-  const floatValue = value.readFloatLE(0);
-  const intValue = value.readInt32BE(0);
-  const uintValue = value.readUInt32BE(0);
+  const decoded = decodeFixed32(value);
 
-  if (intValue === uintValue) {
-    return (
-      <Fragment>
-        As Int: {intValue}
-        <br />
-        As Float: {floatValue}
-        <br />
-      </Fragment>
-    );
-  } else {
-    return (
-      <Fragment>
-        As Int: {intValue}
-        <br />
-        As Unisgned Int: {uintValue}
-        <br />
-        As Float: {floatValue}
-        <br />
-      </Fragment>
-    );
-  }
+  return decoded.map(d => (
+    <span>
+      As {d.type}: {d.value}
+      <br />
+    </span>
+  ));
 }
 
 function getProtobufPart(part) {
