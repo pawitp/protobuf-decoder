@@ -19,3 +19,16 @@ export function bufferToPrettyHex(buffer) {
   }
   return output;
 }
+
+export function bufferLeToBeHex(buffer) {
+  let output = "";
+  for (const v of buffer) {
+    const hex = v.toString(16);
+    if (hex.length === 1) {
+      output = "0" + hex + output;
+    } else {
+      output = hex + output;
+    }
+  }
+  return output;
+}
