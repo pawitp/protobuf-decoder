@@ -1,4 +1,4 @@
-import { decodeFixed32 } from "./protobufPartDecoder";
+import { decodeFixed32, decodeFixed64 } from "./protobufPartDecoder";
 import { parseHex } from "./hexUtils";
 
 describe("decodeFixed32", () => {
@@ -24,5 +24,31 @@ describe("decodeFixed32", () => {
     const uintResult = result.find(r => r.type === "Unsigned Int");
     expect(intResult.value).toEqual(-2000000000);
     expect(uintResult.value).toEqual(2294967296);
+  });
+});
+
+describe("decodeFixed64", () => {
+  it("decode double correctly", () => {
+    const result = decodeFixed64(parseHex("AE47E17A14AEF33F"));
+    const floatResult = result.find(r => r.type === "Double");
+    expect(floatResult.value).toEqual(1.23);
+  });
+
+  it("decode int64 correctly", () => {
+    const result = decodeFixed64(parseHex("000084E2506CE67C"));
+    const intResult = result.find(r => r.type === "Int");
+    const uintResult = result.find(r => r.type === "Unsigned Int");
+    expect(intResult.value).toEqual("9000000000000000000");
+
+    // Should not return Unsigned Int result when Int is not negative
+    expect(uintResult).toBeUndefined();
+  });
+
+  it("decode uint64 correctly", () => {
+    const result = decodeFixed64(parseHex("00007C1DAF931983"));
+    const intResult = result.find(r => r.type === "Int");
+    const uintResult = result.find(r => r.type === "Unsigned Int");
+    expect(intResult.value).toEqual("-9000000000000000000");
+    expect(uintResult.value).toEqual("9446744073709551616");
   });
 });

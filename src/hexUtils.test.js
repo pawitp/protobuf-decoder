@@ -1,4 +1,4 @@
-import { bufferToPrettyHex, parseHex } from "./hexUtils";
+import { bufferLeToBeHex, bufferToPrettyHex, parseHex } from "./hexUtils";
 
 it("should parse lowercased hex", () => {
   const result = parseHex("aabbcc");
@@ -34,4 +34,10 @@ it("should convert hex to string", () => {
   const result = bufferToPrettyHex(parseHex("000102aa"));
 
   expect(result).toEqual("00 01 02 aa");
+});
+
+it("should convert hex to string with opposite endian", () => {
+  const result = bufferLeToBeHex(parseHex("000102aa"));
+
+  expect(result).toEqual("aa020100");
 });

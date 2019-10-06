@@ -1,7 +1,7 @@
 import React from "react";
 import { Table } from "semantic-ui-react";
 import { decodeProto, TYPES, typeToString } from "./protobufDecoder";
-import { decodeFixed32 } from "./protobufPartDecoder";
+import { decodeFixed32, decodeFixed64 } from "./protobufPartDecoder";
 import ProtobufDisplay from "./ProtobufDisplay";
 
 function ProtobufVarintPart(props) {
@@ -25,10 +25,14 @@ function ProtobufStringPart(props) {
 
 function ProtobufFixed64Part(props) {
   const { value } = props;
-  const floatValue = value.readDoubleLE(0);
+  const decoded = decodeFixed64(value);
 
-  // TODO: Support Int64/UInt64
-  return floatValue;
+  return decoded.map(d => (
+    <span>
+      As {d.type}: {d.value}
+      <br />
+    </span>
+  ));
 }
 
 function ProtobufFixed32Part(props) {
