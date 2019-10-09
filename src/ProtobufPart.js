@@ -16,7 +16,7 @@ function ProtobufStringPart(props) {
   // TODO: Support repeated field
 
   const decoded = decodeProto(value);
-  if (decoded.leftOver.length === 0) {
+  if (value.length > 0 && decoded.leftOver.length === 0) {
     return <ProtobufDisplay value={decoded} />;
   } else {
     return value.toString();
