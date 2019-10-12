@@ -8,8 +8,7 @@
     "react-dom": "^16.10.0",
     "react-scripts": "3.1.2",
     "semantic-ui-css": "^2.4.1",
-    "semantic-ui-react": "^0.88.1",
-    "varint": "^5.0.0"
+    "semantic-ui-react": "^0.88.1"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -1,5 +1,6 @@
 import { decodeProto, TYPES } from "./protobufDecoder";
 import { parseHex } from "./hexUtils";
+import JSBI from "jsbi";
 
 it("decode empty protobuf", () => {
   const result = decodeProto(parseHex(""));
@@ -22,7 +23,7 @@ it("decode int", () => {
   expect(result.parts[0]).toEqual({
     index: 1,
     type: TYPES.VARINT,
-    value: 150
+    value: JSBI.BigInt(150)
   });
   expect(result.leftOver).toHaveLength(0);
 });
@@ -46,7 +47,7 @@ it("decode int and string", () => {
   expect(result.parts[0]).toEqual({
     index: 1,
     type: TYPES.VARINT,
-    value: 150
+    value: JSBI.BigInt(150)
   });
   expect(result.parts[1]).toEqual({
     index: 2,
@@ -87,7 +88,19 @@ it("decode int in gRPC", () => {
   expect(result.parts[0]).toEqual({
     index: 1,
     type: TYPES.VARINT,
-    value: 150
+    value: JSBI.BigInt(150)
+  });
+  expect(result.leftOver).toHaveLength(0);
+});
+
+it("decode int larger than maximum allowed by JavaScript", () => {
+  const result = decodeProto(parseHex("20FFFFFFFFFFFFFFFF7F"));
+
+  expect(result.parts).toHaveLength(1);
+  expect(result.parts[0]).toEqual({
+    index: 4,
+    type: TYPES.VARINT,
+    value: JSBI.BigInt("9223372036854775807")
   });
   expect(result.leftOver).toHaveLength(0);
 });
