@@ -1,4 +1,4 @@
-import varint from "varint";
+import { decodeVarint } from "./varintUtils";
 
 class BufferReader {
   constructor(buffer) {
@@ -7,10 +7,10 @@ class BufferReader {
   }
 
   readVarInt() {
-    const result = varint.decode(this.buffer, this.offset);
-    this.offset += varint.decode.bytes;
+    const result = decodeVarint(this.buffer, this.offset);
+    this.offset += result.length;
 
-    return result;
+    return result.value;
   }
 
   readBuffer(length) {
@@ -79,15 +79,15 @@ export function decodeProto(buffer) {
     while (reader.leftBytes() > 0) {
       reader.checkpoint();
 
-      const indexType = reader.readVarInt();
+      const indexType = parseInt(reader.readVarInt().toString());
       const type = indexType & 0b111;
       const index = indexType >> 3;
 
       let value;
       if (type === TYPES.VARINT) {
-        value = reader.readVarInt();
+        value = reader.readVarInt().toString();
       } else if (type === TYPES.STRING) {
-        const length = reader.readVarInt();
+        const length = parseInt(reader.readVarInt().toString());
         value = reader.readBuffer(length);
       } else if (type === TYPES.FIXED32) {
         value = reader.readBuffer(4);
