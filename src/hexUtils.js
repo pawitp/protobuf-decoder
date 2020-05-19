@@ -10,8 +10,7 @@ export function parseInput(input) {
 
 export function isHex(string) {
   let result = true;
-  for (const index of string) {
-    const char = string.charAt(index);
+  for (const char of string) {
     if (!((char >= "a" && char <= "f") || (char >= "0" && char <= "9"))) {
       result = false;
     }
