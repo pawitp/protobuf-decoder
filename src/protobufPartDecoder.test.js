@@ -1,15 +1,15 @@
 import { decodeFixed32, decodeFixed64 } from "./protobufPartDecoder";
-import { parseHex } from "./hexUtils";
+import { parseInput } from "./hexUtils";
 
 describe("decodeFixed32", () => {
   it("decode float correctly", () => {
-    const result = decodeFixed32(parseHex("A4709D3F"));
+    const result = decodeFixed32(parseInput("A4709D3F"));
     const floatResult = result.find(r => r.type === "Float");
     expect(floatResult.value).toEqual(1.2300000190734863);
   });
 
   it("decode int32 correctly", () => {
-    const result = decodeFixed32(parseHex("00943577"));
+    const result = decodeFixed32(parseInput("00943577"));
     const intResult = result.find(r => r.type === "Int");
     const uintResult = result.find(r => r.type === "Unsigned Int");
     expect(intResult.value).toEqual(2000000000);
@@ -19,7 +19,7 @@ describe("decodeFixed32", () => {
   });
 
   it("decode uint32 correctly", () => {
-    const result = decodeFixed32(parseHex("006CCA88"));
+    const result = decodeFixed32(parseInput("006CCA88"));
     const intResult = result.find(r => r.type === "Int");
     const uintResult = result.find(r => r.type === "Unsigned Int");
     expect(intResult.value).toEqual(-2000000000);
@@ -29,13 +29,13 @@ describe("decodeFixed32", () => {
 
 describe("decodeFixed64", () => {
   it("decode double correctly", () => {
-    const result = decodeFixed64(parseHex("AE47E17A14AEF33F"));
+    const result = decodeFixed64(parseInput("AE47E17A14AEF33F"));
     const floatResult = result.find(r => r.type === "Double");
     expect(floatResult.value).toEqual(1.23);
   });
 
   it("decode int64 correctly", () => {
-    const result = decodeFixed64(parseHex("000084E2506CE67C"));
+    const result = decodeFixed64(parseInput("000084E2506CE67C"));
     const intResult = result.find(r => r.type === "Int");
     const uintResult = result.find(r => r.type === "Unsigned Int");
     expect(intResult.value).toEqual("9000000000000000000");
@@ -45,7 +45,7 @@ describe("decodeFixed64", () => {
   });
 
   it("decode uint64 correctly", () => {
-    const result = decodeFixed64(parseHex("00007C1DAF931983"));
+    const result = decodeFixed64(parseInput("00007C1DAF931983"));
     const intResult = result.find(r => r.type === "Int");
     const uintResult = result.find(r => r.type === "Unsigned Int");
     expect(intResult.value).toEqual("-9000000000000000000");

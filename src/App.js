@@ -1,6 +1,6 @@
 import React, { Fragment, useState } from "react";
 import { Container, Divider, Form, Header, TextArea } from "semantic-ui-react";
-import { parseHex, bufferToPrettyHex } from "./hexUtils";
+import { parseInput, bufferToPrettyHex } from "./hexUtils";
 import "./App.css";
 import ProtobufDisplay from "./ProtobufDisplay";
 import { decodeProto } from "./protobufDecoder";
@@ -14,7 +14,7 @@ function App() {
   };
 
   const onSubmit = () => {
-    const buffer = parseHex(hex);
+    const buffer = parseInput(hex);
 
     // Set pretty hex back to UI
     setHex(bufferToPrettyHex(buffer));
@@ -40,7 +40,7 @@ function App() {
       <Form>
         <Form.Group>
           <TextArea
-            placeholder="Paste Protobuf or gRPC request as hex"
+            placeholder="Paste Protobuf or gRPC request as hex or base64"
             onChange={onHexChanged}
             value={hex}
           />
