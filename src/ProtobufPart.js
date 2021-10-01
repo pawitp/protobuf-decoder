@@ -2,12 +2,32 @@ import React from "react";
 import { Table } from "semantic-ui-react";
 import { decodeProto, TYPES, typeToString } from "./protobufDecoder";
 import { decodeFixed32, decodeFixed64 } from "./protobufPartDecoder";
+import { interpretAsSignedType } from "./varintUtils";
+import JSBI from "jsbi";
 import ProtobufDisplay from "./ProtobufDisplay";
 
 function ProtobufVarintPart(props) {
   const { value } = props;
 
-  return value;
+  const asSigned = function(n) {
+    if (n) {
+      let asInt = JSBI.BigInt(n);
+      return (
+        "As signed (zig zag encoded): " +
+        interpretAsSignedType(asInt).toString()
+      );
+    } else {
+      return "";
+    }
+  };
+
+  return (
+    <span>
+      {value}
+      <br />
+      {asSigned(value)}
+    </span>
+  );
 }
 
 function ProtobufStringPart(props) {
