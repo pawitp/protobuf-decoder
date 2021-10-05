@@ -5,18 +5,22 @@ const BIGINT_2 = JSBI.BigInt(2);
 
 export function interpretAsSignedType(n) {
   // see https://github.com/protocolbuffers/protobuf/blob/master/src/google/protobuf/wire_format_lite.h#L857-L876
-  // TODO: does this handle sint64 as well?
-  return JSBI.bitwiseXor(
-    JSBI.signedRightShift(n, BIGINT_1),
-    JSBI.add(JSBI.bitwiseNot(JSBI.bitwiseAnd(n, BIGINT_1)), BIGINT_1)
-  );
+  // however, this is a simpler equivalent formula
+  let isEven = JSBI.equal(JSBI.bitwiseAnd(n, JSBI.BigInt(1)), JSBI.BigInt(0));
+  if (isEven) {
+    return JSBI.divide(n, BIGINT_2);
+  } else {
+    return JSBI.multiply(
+      JSBI.BigInt(-1),
+      JSBI.divide(JSBI.add(n, BIGINT_1), BIGINT_2)
+    );
+  }
 }
 
 export function decodeVarint(buffer, offset) {
   let res = JSBI.BigInt(0);
   let shift = 0;
   let byte = 0;
-  //let sint32Res = JSBI.BigInt(0);
 
   do {
     if (offset >= buffer.length) {
@@ -31,9 +35,18 @@ export function decodeVarint(buffer, offset) {
     res = JSBI.add(res, thisByteValue);
   } while (byte >= 0x80);
 
-  return {
+  let len = shift / 7;
+
+  const result = [];
+  result.push({
+    type: "Int",
     value: res,
-    signedIntValue: interpretAsSignedType(res),
-    length: shift / 7
-  };
+    length: len
+  });
+  result.push({
+    type: "Signed Int",
+    value: interpretAsSignedType(res),
+    length: len
+  });
+  return result;
 }

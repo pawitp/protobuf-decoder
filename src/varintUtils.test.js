@@ -5,27 +5,38 @@ import JSBI from "jsbi";
 describe("decodeVarint", () => {
   it("should decode valid varint", () => {
     const result = decodeVarint(parseInput("AC 02"), 0);
-    expect(result).toEqual({
+    const intResult = result.find(r => r.type === "Int");
+
+    expect(intResult).toEqual({
       value: JSBI.BigInt(300),
-      signedIntValue: JSBI.BigInt(150),
+      type: "Int",
       length: 2
     });
   });
 
-  it("should decode valid varint with an sint32 possibility", () => {
+  it("should decode valid varint with a signed integer possibility", () => {
     const result = decodeVarint(parseInput("9F A3 64"), 0);
-    expect(result).toEqual({
+    const intResult = result.find(r => r.type === "Int");
+    expect(intResult).toEqual({
       value: JSBI.BigInt(1642911),
-      signedIntValue: JSBI.BigInt(-821456),
+      type: "Int",
+      length: 3
+    });
+
+    const signedIntResult = result.find(r => r.type === "Signed Int");
+    expect(signedIntResult).toEqual({
+      value: JSBI.BigInt(-821456),
+      type: "Signed Int",
       length: 3
     });
   });
 
   it("should decode valid varint with offset", () => {
     const result = decodeVarint(parseInput("AC 02"), 1);
-    expect(result).toEqual({
+    const intResult = result.find(r => r.type === "Int");
+    expect(intResult).toEqual({
       value: JSBI.BigInt(2),
-      signedIntValue: JSBI.BigInt(1),
+      type: "Int",
       length: 1
     });
   });
