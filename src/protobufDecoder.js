@@ -8,11 +8,9 @@ class BufferReader {
 
   readVarInt() {
     const result = decodeVarint(this.buffer, this.offset);
-    // return the "regular" (uninterpreted) int result from here
-    const intResult = result.find(r => r.type === "Int");
-    this.offset += intResult.length;
+    this.offset += result.length;
 
-    return intResult.value;
+    return result.value;
   }
 
   readBuffer(length) {

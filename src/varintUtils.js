@@ -35,18 +35,8 @@ export function decodeVarint(buffer, offset) {
     res = JSBI.add(res, thisByteValue);
   } while (byte >= 0x80);
 
-  let len = shift / 7;
-
-  const result = [];
-  result.push({
-    type: "Int",
+  return {
     value: res,
-    length: len
-  });
-  result.push({
-    type: "Signed Int",
-    value: interpretAsSignedType(res),
-    length: len
-  });
-  return result;
+    length: shift / 7
+  };
 }
