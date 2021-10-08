@@ -59,7 +59,7 @@ describe("decodeFixed64", () => {
 
 describe("decodeVarintParts", () => {
   it("decode varint parts correctly", () => {
-    const result = decodeVarintParts(parseInput("9FA364"));
+    const result = decodeVarintParts("1642911");
     const intResult = result.find(r => r.type === "Int");
     expect(intResult.value).toEqual("1642911");
     const signedIntResult = result.find(r => r.type === "Signed Int");

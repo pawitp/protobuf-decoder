@@ -1,6 +1,6 @@
 import JSBI from "jsbi";
 import { bufferLeToBeHex } from "./hexUtils";
-import { decodeVarint, interpretAsSignedType } from "./varintUtils";
+import { interpretAsSignedType } from "./varintUtils";
 
 export function decodeFixed32(value) {
   const floatValue = value.readFloatLE(0);
@@ -38,13 +38,13 @@ export function decodeFixed64(value) {
   return result;
 }
 
-export function decodeVarintParts(buffer) {
+export function decodeVarintParts(value) {
   const result = [];
-  const intVal = decodeVarint(buffer, 0);
-  result.push({ type: "Int", value: intVal.value.toString() });
+  const intVal = JSBI.BigInt(value);
+  result.push({ type: "Int", value: intVal.toString() });
 
-  const signedIntVal = interpretAsSignedType(intVal.value);
-  if (signedIntVal !== buffer) {
+  const signedIntVal = interpretAsSignedType(intVal);
+  if (signedIntVal !== intVal) {
     result.push({ type: "Signed Int", value: signedIntVal.toString() });
   }
   return result;
