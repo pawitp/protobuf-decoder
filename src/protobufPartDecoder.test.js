@@ -1,4 +1,8 @@
-import { decodeFixed32, decodeFixed64 } from "./protobufPartDecoder";
+import {
+  decodeFixed32,
+  decodeFixed64,
+  decodeVarintParts
+} from "./protobufPartDecoder";
 import { parseInput } from "./hexUtils";
 
 describe("decodeFixed32", () => {
@@ -50,5 +54,15 @@ describe("decodeFixed64", () => {
     const uintResult = result.find(r => r.type === "Unsigned Int");
     expect(intResult.value).toEqual("-9000000000000000000");
     expect(uintResult.value).toEqual("9446744073709551616");
+  });
+});
+
+describe("decodeVarintParts", () => {
+  it("decode varint parts correctly", () => {
+    const result = decodeVarintParts("1642911");
+    const intResult = result.find(r => r.type === "Int");
+    expect(intResult.value).toEqual("1642911");
+    const signedIntResult = result.find(r => r.type === "Signed Int");
+    expect(signedIntResult.value).toEqual("-821456");
   });
 });

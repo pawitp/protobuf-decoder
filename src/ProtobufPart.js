@@ -1,13 +1,23 @@
 import React from "react";
 import { Table } from "semantic-ui-react";
 import { decodeProto, TYPES, typeToString } from "./protobufDecoder";
-import { decodeFixed32, decodeFixed64 } from "./protobufPartDecoder";
+import {
+  decodeFixed32,
+  decodeFixed64,
+  decodeVarintParts
+} from "./protobufPartDecoder";
 import ProtobufDisplay from "./ProtobufDisplay";
 
 function ProtobufVarintPart(props) {
   const { value } = props;
+  const decoded = decodeVarintParts(value);
 
-  return value;
+  return decoded.map(d => (
+    <span>
+      As {d.type}: {d.value}
+      <br />
+    </span>
+  ));
 }
 
 function ProtobufStringPart(props) {
