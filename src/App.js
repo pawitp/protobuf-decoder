@@ -35,7 +35,7 @@ function App() {
       <Header as="h1">Protobuf Decoder</Header>
       <p>
         Tool to decode Protobuf without having the original .proto files. All
-        decoding is done via locally via JavaScript.
+        decoding is done locally via JavaScript.
       </p>
       <Form>
         <Form.Group>
