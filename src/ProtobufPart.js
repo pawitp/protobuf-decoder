@@ -7,13 +7,14 @@ import {
   decodeVarintParts
 } from "./protobufPartDecoder";
 import ProtobufDisplay from "./ProtobufDisplay";
+import { v4 } from "uuid";
 
 function ProtobufVarintPart(props) {
   const { value } = props;
   const decoded = decodeVarintParts(value);
 
   return decoded.map(d => (
-    <span>
+    <span key={v4()}>
       As {d.type}: {d.value}
       <br />
     </span>
@@ -38,7 +39,7 @@ function ProtobufFixed64Part(props) {
   const decoded = decodeFixed64(value);
 
   return decoded.map(d => (
-    <span>
+    <span key={v4()}>
       As {d.type}: {d.value}
       <br />
     </span>
