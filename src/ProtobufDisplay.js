@@ -2,13 +2,12 @@ import React, { Fragment } from "react";
 import ProtobufPart from "./ProtobufPart";
 import { Table } from "semantic-ui-react";
 import { bufferToPrettyHex } from "./hexUtils";
-import { v4 } from "uuid";
 
 function ProtobufDisplay(props) {
   const { value } = props;
 
-  const parts = value.parts.map(part => {
-    return <ProtobufPart key={v4()} part={part} />;
+  const parts = value.parts.map((part, i) => {
+    return <ProtobufPart key={i} part={part} />;
   });
 
   const leftOver = value.leftOver.length ? (
