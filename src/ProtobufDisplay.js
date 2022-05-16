@@ -6,8 +6,8 @@ import { bufferToPrettyHex } from "./hexUtils";
 function ProtobufDisplay(props) {
   const { value } = props;
 
-  const parts = value.parts.map(part => {
-    return <ProtobufPart part={part} />;
+  const parts = value.parts.map((part, i) => {
+    return <ProtobufPart key={i} part={part} />;
   });
 
   const leftOver = value.leftOver.length ? (
