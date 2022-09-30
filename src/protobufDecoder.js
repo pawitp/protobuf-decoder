@@ -25,7 +25,7 @@ class BufferReader {
   trySkipGrpcHeader() {
     const backupOffset = this.offset;
 
-    if (this.buffer[this.offset] === 0) {
+    if (this.buffer[this.offset] === 0 && this.leftBytes() >= 5) {
       this.offset++;
       const length = this.buffer.readInt32BE(this.offset);
       this.offset += 4;
