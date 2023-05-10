@@ -19,6 +19,7 @@ function ProtobufDisplay(props) {
       <Table celled>
         <Table.Header>
           <Table.Row>
+            <Table.HeaderCell>Byte Range</Table.HeaderCell>
             <Table.HeaderCell>Field Number</Table.HeaderCell>
             <Table.HeaderCell>Type</Table.HeaderCell>
             <Table.HeaderCell>Content</Table.HeaderCell>
