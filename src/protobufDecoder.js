@@ -65,7 +65,7 @@ class BufferReader {
 export const TYPES = {
   VARINT: 0,
   FIXED64: 1,
-  STRING: 2,
+  LENDELIM: 2,
   FIXED32: 5
 };
 
@@ -79,6 +79,7 @@ export function decodeProto(buffer) {
     while (reader.leftBytes() > 0) {
       reader.checkpoint();
 
+      const byteRange = [reader.offset];
       const indexType = parseInt(reader.readVarInt().toString());
       const type = indexType & 0b111;
       const index = indexType >> 3;
@@ -86,7 +87,7 @@ export function decodeProto(buffer) {
       let value;
       if (type === TYPES.VARINT) {
         value = reader.readVarInt().toString();
-      } else if (type === TYPES.STRING) {
+      } else if (type === TYPES.LENDELIM) {
         const length = parseInt(reader.readVarInt().toString());
         value = reader.readBuffer(length);
       } else if (type === TYPES.FIXED32) {
@@ -96,8 +97,10 @@ export function decodeProto(buffer) {
       } else {
         throw new Error("Unknown type: " + type);
       }
+      byteRange.push(reader.offset);
 
       parts.push({
+        byteRange,
         index,
         type,
         value
@@ -113,12 +116,12 @@ export function decodeProto(buffer) {
   };
 }
 
-export function typeToString(type) {
+export function typeToString(type, subType) {
   switch (type) {
     case TYPES.VARINT:
       return "varint";
-    case TYPES.STRING:
-      return "string";
+    case TYPES.LENDELIM:
+      return subType || "len_delim";
     case TYPES.FIXED32:
       return "fixed32";
     case TYPES.FIXED64:

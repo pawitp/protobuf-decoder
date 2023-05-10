@@ -50,6 +50,18 @@ export function decodeVarintParts(value) {
   return result;
 }
 
+export function decodeStringOrBytes(value) {
+  if (!value.length) {
+    return { type: "string|bytes", value: "" };
+  }
+  const td = new TextDecoder("utf-8", { fatal: true });
+  try {
+    return { type: "string", value: td.decode(value) };
+  } catch (e) {
+    return { type: "bytes", value: value.toString("hex") };
+  }
+}
+
 const maxLong = JSBI.BigInt("0x7fffffffffffffff");
 const longForComplement = JSBI.BigInt("0x10000000000000000");
 
