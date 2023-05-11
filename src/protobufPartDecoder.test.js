@@ -1,7 +1,8 @@
 import {
   decodeFixed32,
   decodeFixed64,
-  decodeVarintParts
+  decodeVarintParts,
+  decodeStringOrBytes
 } from "./protobufPartDecoder";
 import { parseInput } from "./hexUtils";
 
@@ -64,5 +65,35 @@ describe("decodeVarintParts", () => {
     expect(intResult.value).toEqual("1642911");
     const signedIntResult = result.find(r => r.type === "Signed Int");
     expect(signedIntResult.value).toEqual("-821456");
+  });
+});
+
+describe("decodeStringOrBytes", () => {
+  const TextDecoder = require("util").TextDecoder;
+  const emulateBrowser = () => void (global.TextDecoder = TextDecoder);
+
+  it("decode string correctly", () => {
+    emulateBrowser();
+    const text = "normal ascii input";
+    const input = Uint8Array.from(text.split("").map(c => c.charCodeAt(0)));
+    const result = decodeStringOrBytes(input);
+    expect(result.value).toEqual(text);
+    expect(result.type).toEqual("string");
+  });
+
+  it("decode bytes correctly", () => {
+    emulateBrowser();
+    const bytes = new Uint8Array([0, 128, 255]);
+    const result = decodeStringOrBytes(bytes);
+    expect(result.value).toEqual("00 80 ff");
+    expect(result.type).toEqual("bytes");
+  });
+
+  it("decode empty string|bytes correctly", () => {
+    emulateBrowser();
+    const empty = new Uint8Array([]);
+    const result = decodeStringOrBytes(empty);
+    expect(result.value).toEqual("");
+    expect(result.type).toEqual("string|bytes");
   });
 });
