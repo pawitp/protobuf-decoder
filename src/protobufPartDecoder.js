@@ -1,5 +1,5 @@
 import JSBI from "jsbi";
-import { bufferLeToBeHex } from "./hexUtils";
+import { bufferLeToBeHex, bufferToPrettyHex } from "./hexUtils";
 import { interpretAsSignedType } from "./varintUtils";
 
 export function decodeFixed32(value) {
@@ -58,7 +58,7 @@ export function decodeStringOrBytes(value) {
   try {
     return { type: "string", value: td.decode(value) };
   } catch (e) {
-    return { type: "bytes", value: value.toString("hex") };
+    return { type: "bytes", value: bufferToPrettyHex(value) };
   }
 }
 

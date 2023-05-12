@@ -20,6 +20,7 @@ it("decode int", () => {
 
   expect(result.parts).toHaveLength(1);
   expect(result.parts[0]).toEqual({
+    byteRange: [0, 3],
     index: 1,
     type: TYPES.VARINT,
     value: "150"
@@ -32,8 +33,9 @@ it("decode string", () => {
 
   expect(result.parts).toHaveLength(1);
   expect(result.parts[0]).toEqual({
+    byteRange: [0, 9],
     index: 2,
-    type: TYPES.STRING,
+    type: TYPES.LENDELIM,
     value: Buffer.from("testing")
   });
   expect(result.leftOver).toHaveLength(0);
@@ -44,13 +46,15 @@ it("decode int and string", () => {
 
   expect(result.parts).toHaveLength(2);
   expect(result.parts[0]).toEqual({
+    byteRange: [0, 3],
     index: 1,
     type: TYPES.VARINT,
     value: "150"
   });
   expect(result.parts[1]).toEqual({
+    byteRange: [3, 12],
     index: 2,
-    type: TYPES.STRING,
+    type: TYPES.LENDELIM,
     value: Buffer.from("testing")
   });
   expect(result.leftOver).toHaveLength(0);
@@ -61,6 +65,7 @@ it("decode 64-bit value", () => {
 
   expect(result.parts).toHaveLength(1);
   expect(result.parts[0]).toEqual({
+    byteRange: [0, 9],
     index: 2,
     type: TYPES.FIXED64,
     value: parseInput("AB AA AA AA AA AA 20 40")
@@ -73,6 +78,7 @@ it("decode 32-bit value", () => {
 
   expect(result.parts).toHaveLength(1);
   expect(result.parts[0]).toEqual({
+    byteRange: [0, 5],
     index: 2,
     type: TYPES.FIXED32,
     value: parseInput("AB AA 20 40")
@@ -85,6 +91,7 @@ it("decode int in gRPC", () => {
 
   expect(result.parts).toHaveLength(1);
   expect(result.parts[0]).toEqual({
+    byteRange: [5, 8],
     index: 1,
     type: TYPES.VARINT,
     value: "150"
@@ -97,6 +104,7 @@ it("decode int larger than maximum allowed by JavaScript", () => {
 
   expect(result.parts).toHaveLength(1);
   expect(result.parts[0]).toEqual({
+    byteRange: [0, 10],
     index: 4,
     type: TYPES.VARINT,
     value: "9223372036854775807"
