@@ -1,5 +1,13 @@
 import React, { Fragment, useState } from "react";
-import { Container, Divider, Form, Header, TextArea, Input } from "semantic-ui-react";
+import {
+  Checkbox,
+  Container,
+  Divider,
+  Form,
+  Header,
+  TextArea, 
+  Input,
+} from "semantic-ui-react";
 import { parseInput, bufferToPrettyHex } from "./hexUtils";
 import "./App.css";
 import ProtobufDisplay from "./ProtobufDisplay";
@@ -7,6 +15,7 @@ import { decodeProto } from "./protobufDecoder";
 
 function App() {
   const [hex, setHex] = useState("");
+  const [parseDelimited, setParseDelimited] = useState(false);
   const [hexBuffer, setHexBuffer] = useState("");
 
   const onHexChanged = e => {
@@ -34,7 +43,7 @@ function App() {
   const result = hexBuffer ? (
     <Fragment>
       <Header as="h2">Result</Header>
-      <ProtobufDisplay value={decodeProto(hexBuffer)} />
+      <ProtobufDisplay value={decodeProto(hexBuffer, parseDelimited)} />
     </Fragment>
   ) : null;
 
@@ -64,6 +73,15 @@ function App() {
             }}
             onChange={fileChange}
             type='file'
+          />
+        </Form.Group>
+        <Form.Group>
+          <Checkbox
+            label="parse varint length delimited input"
+            onChange={(evt, data) => {
+              setParseDelimited(data.checked);
+            }}
+            checked={parseDelimited}
           />
         </Form.Group>
         <Form.Button primary fluid onClick={onSubmit}>
