@@ -19,8 +19,6 @@ $ yarn start
 
 Once the application started, open http://localhost:3000 on web browser.
 
-**Note**: This project is currently not compatible with Node 18. Please use Node 17 to run and compile this project. See https://github.com/pawitp/protobuf-decoder/issues/47 for more information.
-
 ## Usage
 
 Paste Protobuf data in hex format, then press **Decode** button.
