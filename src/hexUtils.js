@@ -1,3 +1,5 @@
+import { Buffer } from 'buffer'
+
 export function parseInput(input) {
   const normalizedInput = input.replace(/\s/g, "");
   const normalizedHexInput = normalizedInput.replace(/0x/g, "").toLowerCase();
