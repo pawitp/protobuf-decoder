@@ -9,13 +9,13 @@ export function decodeFixed32(value) {
 
   const result = [];
 
-  result.push({ type: "Int", value: intValue });
+  result.push({ type: "int", value: intValue });
 
   if (intValue !== uintValue) {
-    result.push({ type: "Unsigned Int", value: uintValue });
+    result.push({ type: "uint", value: uintValue });
   }
 
-  result.push({ type: "Float", value: floatValue });
+  result.push({ type: "float", value: floatValue });
 
   return result;
 }
@@ -27,13 +27,13 @@ export function decodeFixed64(value) {
 
   const result = [];
 
-  result.push({ type: "Int", value: intValue.toString() });
+  result.push({ type: "int", value: intValue.toString() });
 
   if (intValue !== uintValue) {
-    result.push({ type: "Unsigned Int", value: uintValue.toString() });
+    result.push({ type: "uint", value: uintValue.toString() });
   }
 
-  result.push({ type: "Double", value: floatValue });
+  result.push({ type: "double", value: floatValue });
 
   return result;
 }
@@ -41,11 +41,11 @@ export function decodeFixed64(value) {
 export function decodeVarintParts(value) {
   const result = [];
   const intVal = JSBI.BigInt(value);
-  result.push({ type: "Int", value: intVal.toString() });
+  result.push({ type: "uint", value: intVal.toString() });
 
   const signedIntVal = interpretAsSignedType(intVal);
   if (signedIntVal !== intVal) {
-    result.push({ type: "Signed Int", value: signedIntVal.toString() });
+    result.push({ type: "sint", value: signedIntVal.toString() });
   }
   return result;
 }
