@@ -33,7 +33,7 @@ export function decodeFixed64(value) {
     result.push({ type: "Unsigned Int", value: uintValue.toString() });
   }
 
-  result.push({ type: "Double", value: floatValue });
+  result.push({ type: "Double", value: floatValue.toFixed(2) });
 
   return result;
 }
