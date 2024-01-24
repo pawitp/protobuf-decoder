@@ -1,6 +1,6 @@
 import JSBI from "jsbi";
 import { bufferLeToBeHex, bufferToPrettyHex } from "./hexUtils";
-import { interpretAsSignedType } from "./varintUtils";
+import { interpretAsSignedType, interpretAsTwosComplement } from "./intUtils";
 
 export function decodeFixed32(value) {
   const floatValue = value.readFloatLE(0);
@@ -9,13 +9,13 @@ export function decodeFixed32(value) {
 
   const result = [];
 
-  result.push({ type: "Int", value: intValue });
+  result.push({ type: "int", value: intValue });
 
   if (intValue !== uintValue) {
-    result.push({ type: "Unsigned Int", value: uintValue });
+    result.push({ type: "uint", value: uintValue });
   }
 
-  result.push({ type: "Float", value: floatValue });
+  result.push({ type: "float", value: floatValue });
 
   return result;
 }
@@ -23,30 +23,38 @@ export function decodeFixed32(value) {
 export function decodeFixed64(value) {
   const floatValue = value.readDoubleLE(0);
   const uintValue = JSBI.BigInt("0x" + bufferLeToBeHex(value));
-  const intValue = twoComplements(uintValue);
+  const intValue = interpretAsTwosComplement(uintValue, 64);
 
   const result = [];
 
-  result.push({ type: "Int", value: intValue.toString() });
+  result.push({ type: "int", value: intValue.toString() });
 
   if (intValue !== uintValue) {
-    result.push({ type: "Unsigned Int", value: uintValue.toString() });
+    result.push({ type: "uint", value: uintValue.toString() });
   }
 
-  result.push({ type: "Double", value: floatValue });
+  result.push({ type: "double", value: floatValue });
 
   return result;
 }
 
 export function decodeVarintParts(value) {
   const result = [];
-  const intVal = JSBI.BigInt(value);
-  result.push({ type: "Int", value: intVal.toString() });
+  const uintVal = JSBI.BigInt(value);
+  result.push({ type: "uint", value: uintVal.toString() });
 
-  const signedIntVal = interpretAsSignedType(intVal);
-  if (signedIntVal !== intVal) {
-    result.push({ type: "Signed Int", value: signedIntVal.toString() });
+  for (const bits of [8, 16, 32, 64]) {
+    const intVal = interpretAsTwosComplement(uintVal, bits);
+    if (intVal !== uintVal) {
+      result.push({ type: "int" + bits, value: intVal.toString() });
+    }
   }
+
+  const signedIntVal = interpretAsSignedType(uintVal);
+  if (signedIntVal !== uintVal) {
+    result.push({ type: "sint", value: signedIntVal.toString() });
+  }
+
   return result;
 }
 
@@ -59,16 +67,5 @@ export function decodeStringOrBytes(value) {
     return { type: "string", value: td.decode(value) };
   } catch (e) {
     return { type: "bytes", value: bufferToPrettyHex(value) };
-  }
-}
-
-const maxLong = JSBI.BigInt("0x7fffffffffffffff");
-const longForComplement = JSBI.BigInt("0x10000000000000000");
-
-function twoComplements(uintValue) {
-  if (JSBI.greaterThan(uintValue, maxLong)) {
-    return JSBI.subtract(uintValue, longForComplement);
-  } else {
-    return uintValue;
   }
 }
