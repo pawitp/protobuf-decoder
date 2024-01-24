@@ -59,12 +59,20 @@ describe("decodeFixed64", () => {
 });
 
 describe("decodeVarintParts", () => {
-  it("decode varint parts correctly", () => {
+  it("decode varint parts with sint correctly", () => {
     const result = decodeVarintParts("1642911");
     const intResult = result.find(r => r.type === "uint");
     expect(intResult.value).toEqual("1642911");
     const signedIntResult = result.find(r => r.type === "sint");
     expect(signedIntResult.value).toEqual("-821456");
+  });
+
+  it("decode varint parts with int correctly", () => {
+    const result = decodeVarintParts("255");
+    const intResult = result.find(r => r.type === "uint");
+    expect(intResult.value).toEqual("255");
+    const signedIntResult = result.find(r => r.type === "int8");
+    expect(signedIntResult.value).toEqual("-1");
   });
 });
 
