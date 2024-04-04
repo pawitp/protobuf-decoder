@@ -67,6 +67,8 @@ function getProtobufPart(part) {
       return [<ProtobufFixed64Part value={part.value} />];
     case TYPES.FIXED32:
       return [<ProtobufFixed32Part value={part.value} />];
+    case TYPES.MSG_LEN_DELIMITER:
+      return ["Message length: " + part.value + " bytes"];
     default:
       return ["Unknown type"];
   }
