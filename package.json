@@ -2,24 +2,11 @@
   "name": "protobuf-decoder",
   "version": "0.1.0",
   "private": true,
-  "dependencies": {
-    "@testing-library/jest-dom": "^5.14.1",
-    "@testing-library/react": "^13.0.0",
-    "@testing-library/user-event": "^13.2.1",
-    "buffer": "^6.0.3",
-    "jsbi": "^3.1.1",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-scripts": "5.0.1",
-    "semantic-ui-css": "^2.4.1",
-    "semantic-ui-react": "^0.88.1",
-    "web-vitals": "^2.1.0"
-  },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "vite",
+    "build": "vite build --outDir build",
+    "test": "vitest --run --globals --reporter verbose",
+    "test:watch": "vitest --globals --reporter verbose --ui"
   },
   "eslintConfig": {
     "extends": [
@@ -40,9 +27,13 @@
     ]
   },
   "devDependencies": {
+    "@vitejs/plugin-react-swc": "^3.6.0",
+    "@vitest/ui": "^1.5.2",
     "husky": ">=1",
     "lint-staged": ">=8",
-    "prettier": "1.18.2"
+    "prettier": "1.18.2",
+    "vite": "^5.2.10",
+    "vitest": "^1.5.2"
   },
   "husky": {
     "hooks": {
@@ -54,5 +45,13 @@
       "prettier --write",
       "git add"
     ]
+  },
+  "dependencies": {
+    "@testing-library/react": "^15.0.4",
+    "buffer": "^6.0.3",
+    "jsbi": "^4.3.0",
+    "react": "^18.3.0",
+    "semantic-ui-css": "^2.5.0",
+    "semantic-ui-react": "^2.1.5"
   }
 }
