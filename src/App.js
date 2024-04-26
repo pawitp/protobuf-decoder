@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from "react";
-import { Container, Divider, Form, Header, TextArea } from "semantic-ui-react";
+import { Container, Divider, Form, Header, TextArea, Input } from "semantic-ui-react";
 import { parseInput, bufferToPrettyHex } from "./hexUtils";
 import "./App.css";
 import ProtobufDisplay from "./ProtobufDisplay";
@@ -23,6 +23,14 @@ function App() {
     setHexBuffer(buffer);
   };
 
+  const fileChange = async e => {
+    const file = (e.target.files || [])[0];
+    if (file) {
+      const b = new Uint8Array(await file.arrayBuffer());
+      setHex([...b].map(c => c.toString(16).padStart(2, '0')).join(' '));
+    }
+  };
+
   const result = hexBuffer ? (
     <Fragment>
       <Header as="h2">Result</Header>
@@ -43,6 +51,19 @@ function App() {
             placeholder="Paste Protobuf or gRPC request as hex or base64"
             onChange={onHexChanged}
             value={hex}
+          />
+          <Input
+            action={{
+              icon: 'upload',
+              className: 'file-button-provider-icon',
+              onClick: () => document.querySelector('#file-input-button').click()
+            }}
+            input={{
+              id: 'file-input-button',
+              hidden: true
+            }}
+            onChange={fileChange}
+            type='file'
           />
         </Form.Group>
         <Form.Button primary fluid onClick={onSubmit}>
