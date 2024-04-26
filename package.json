@@ -29,6 +29,7 @@
   "devDependencies": {
     "@testing-library/react": "^15.0.4",
     "@vitejs/plugin-react-swc": "^3.6.0",
+    "@vitest/coverage-v8": "^1.5.2",
     "@vitest/ui": "^1.5.2",
     "husky": ">=1",
     "lint-staged": ">=8",
