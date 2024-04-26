@@ -32,6 +32,7 @@
     "@vitest/coverage-v8": "^1.5.2",
     "@vitest/ui": "^1.5.2",
     "husky": ">=1",
+    "jsdom": "^24.0.0",
     "lint-staged": ">=8",
     "prettier": "1.18.2",
     "vite": "^5.2.10",
