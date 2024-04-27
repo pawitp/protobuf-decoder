@@ -20,23 +20,6 @@ export function isHex(string) {
   return result;
 }
 
-export function bufferToPrettyHex(buffer) {
-  let output = "";
-  for (const v of buffer) {
-    if (output !== "") {
-      output += " ";
-    }
-
-    const hex = v.toString(16);
-    if (hex.length === 1) {
-      output += "0" + hex;
-    } else {
-      output += hex;
-    }
-  }
-  return output;
-}
-
 export function bufferLeToBeHex(buffer) {
   let output = "";
   for (const v of buffer) {
@@ -49,3 +32,5 @@ export function bufferLeToBeHex(buffer) {
   }
   return output;
 }
+
+export const bufferToPrettyHex = b => [...b].map(c => c.toString(16).padStart(2, '0')).join(' ');
