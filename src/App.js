@@ -27,7 +27,7 @@ function App() {
     const file = (e.target.files || [])[0];
     if (file) {
       const b = new Uint8Array(await file.arrayBuffer());
-      setHex([...b].map(c => c.toString(16).padStart(2, '0')).join(' '));
+      setHex(bufferToPrettyHex(b));
     }
   };
 
