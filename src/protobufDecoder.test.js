@@ -1,6 +1,8 @@
 import { decodeProto, TYPES } from "./protobufDecoder";
 import { parseInput } from "./hexUtils";
 
+const te = new TextEncoder();
+
 it("decode empty protobuf", () => {
   const result = decodeProto(parseInput(""));
 
@@ -31,13 +33,10 @@ it("decode int", () => {
 it("decode string", () => {
   const result = decodeProto(parseInput("12 07 74 65 73 74 69 6e 67"));
 
-  expect(result.parts).toHaveLength(1);
-  expect(result.parts[0]).toEqual({
-    byteRange: [0, 9],
-    index: 2,
-    type: TYPES.LENDELIM,
-    value: Buffer.from("testing")
-  });
+  expect(result.parts[0].byteRange).toEqual([0, 9]);
+  expect(result.parts[0].index).toEqual(2);
+  expect(result.parts[0].type).toEqual(TYPES.LENDELIM);
+  expect([...result.parts[0].value]).toEqual([...te.encode("testing")]);
   expect(result.leftOver).toHaveLength(0);
 });
 
@@ -51,12 +50,13 @@ it("decode int and string", () => {
     type: TYPES.VARINT,
     value: "150"
   });
-  expect(result.parts[1]).toEqual({
-    byteRange: [3, 12],
-    index: 2,
-    type: TYPES.LENDELIM,
-    value: Buffer.from("testing")
-  });
+
+  expect(result.parts[1].byteRange).toEqual([3, 12]);
+  expect(result.parts[1].index).toEqual(2);
+  expect(result.parts[1].type).toEqual(TYPES.LENDELIM);
+  expect([...result.parts[1].value]).toEqual([...te.encode("testing")]);
+
+
   expect(result.leftOver).toHaveLength(0);
 });
 
