@@ -15,5 +15,7 @@ jobs:
       - name: Install Dependencies
         run: npm ci
       - name: Test
-        run: npm test
+        run: npm test --coverage
+      - name: Upload Coverage
+        run: bash <(curl -s https://codecov.io/bash)
 
