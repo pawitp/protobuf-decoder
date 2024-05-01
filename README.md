@@ -6,15 +6,15 @@
 
 Protobuf Decoder is a web application based on React to decode and visualize Protobuf data (hex) into prettified table layout.
 
-> For live version, please visit: https://protobuf-decoder.netlify.com/
+> For live version, please visit: https://protobuf-decoder.netlify.app/
 
 ## Getting Started
 
-To start application locally, use [Yarn](https://yarnpkg.com) to get the dependencies and start the application.
+To start application locally, use `npm` to get the dependencies and start the application.
 
 ```
-$ yarn install
-$ yarn start
+$ npm install
+$ npm start
 ```
 
 Once the application started, open http://localhost:3000 on web browser.
