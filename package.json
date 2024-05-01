@@ -5,8 +5,8 @@
   "scripts": {
     "start": "vite",
     "build": "vite build --outDir build",
-    "test": "vitest --run --globals --reporter verbose",
-    "test:watch": "vitest --globals --reporter verbose --ui"
+    "test": "NODE_NO_WARNINGS=1 vitest --run --globals --reporter verbose --coverage",
+    "test:watch": "NODE_NO_WARNINGS=1 vitest --globals --reporter verbose --ui"
   },
   "eslintConfig": {
     "extends": [
