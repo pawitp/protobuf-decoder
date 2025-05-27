@@ -63,21 +63,40 @@ class BufferReader {
 }
 
 export const TYPES = {
+  MSG_LEN_DELIMITER: -1,
   VARINT: 0,
   FIXED64: 1,
   LENDELIM: 2,
   FIXED32: 5
 };
 
-export function decodeProto(buffer) {
+export function decodeProto(buffer, parseDelimited) {
   const reader = new BufferReader(buffer);
   const parts = [];
 
   reader.trySkipGrpcHeader();
 
+  var protoBufMsgLength = 0;
+  var protoBufMsgEnd = 0;
+
   try {
     while (reader.leftBytes() > 0) {
       reader.checkpoint();
+
+      if (parseDelimited && protoBufMsgEnd === reader.offset) {
+        console.log("found delimiter at " + reader.offset);
+        const byteRange = [reader.offset];
+        protoBufMsgLength = parseInt(reader.readVarInt().toString());
+        protoBufMsgEnd = reader.offset + protoBufMsgLength;
+        byteRange.push(reader.offset);
+        parts.push({
+          byteRange,
+          index: -1,
+          type: TYPES.MSG_LEN_DELIMITER,
+          subType: "Message delimiter",
+          value: protoBufMsgLength
+        });
+      }
 
       const byteRange = [reader.offset];
       const indexType = parseInt(reader.readVarInt().toString());
@@ -107,6 +126,7 @@ export function decodeProto(buffer) {
       });
     }
   } catch (err) {
+    console.log(err);
     reader.resetToCheckpoint();
   }
 
@@ -126,6 +146,8 @@ export function typeToString(type, subType) {
       return "fixed32";
     case TYPES.FIXED64:
       return "fixed64";
+    case TYPES.MSG_LEN_DELIMITER:
+      return "Message delimiter";
     default:
       return "unknown";
   }
