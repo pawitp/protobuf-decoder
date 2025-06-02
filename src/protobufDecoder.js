@@ -93,7 +93,6 @@ export function decodeProto(buffer, parseDelimited) {
           byteRange,
           index: -1,
           type: TYPES.MSG_LEN_DELIMITER,
-          subType: "Message delimiter",
           value: protoBufMsgLength
         });
       }

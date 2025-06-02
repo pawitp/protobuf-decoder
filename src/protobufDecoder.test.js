@@ -1,5 +1,6 @@
-import { decodeProto, TYPES } from "./protobufDecoder";
+import { decodeProto, TYPES, typeToString } from "./protobufDecoder";
 import { parseInput } from "./hexUtils";
+import { expect } from "vitest";
 
 const te = new TextEncoder();
 
@@ -118,3 +119,139 @@ it("put undecodable values into leftover", () => {
   expect(result.parts).toHaveLength(0);
   expect(result.leftOver.toString("hex")).toEqual("123456");
 });
+
+
+it("convert type to string", () => {
+    expect(typeToString(TYPES.VARINT)).toEqual("varint");
+    expect(typeToString(TYPES.LENDELIM)).toEqual("len_delim");
+    expect(typeToString(TYPES.FIXED32)).toEqual("fixed32");
+    expect(typeToString(TYPES.FIXED64)).toEqual("fixed64");
+    expect(typeToString(TYPES.MSG_LEN_DELIMITER)).toEqual("Message delimiter");
+    expect(typeToString(-2)).toEqual("unknown");
+    expect(typeToString(3)).toEqual("unknown");
+    expect(typeToString(4)).toEqual("unknown");
+    expect(typeToString(6)).toEqual("unknown");
+})
+
+it("decode logs error on unknown type", () => {
+    const consoleMock = vi.spyOn(console, 'log').mockImplementation(() => undefined);
+    const result = decodeProto(parseInput("0B"));
+    expect(result.parts).toHaveLength(0);
+    expect(result.leftOver.toString("hex")).toEqual("0b");
+    expect(consoleMock).toHaveBeenCalledWith(new Error("Unknown type: 3"));
+    consoleMock.mockRestore();
+})
+
+
+it("decode length delimited - single message", () => {
+    const result = decodeProto(parseInput("0408011802"), true);
+
+    expect(result.parts).toHaveLength(3);
+    expect(result.leftOver.toString("hex")).toEqual("");
+
+    // length delimiter
+    expect(result.parts[0]).toEqual({
+        byteRange: [0, 1],
+        index: -1,
+        type: TYPES.MSG_LEN_DELIMITER,
+        value: 4
+    });
+     // field 1: varint
+     expect(result.parts[1]).toEqual({
+        byteRange: [1, 3],
+        index: 1,
+        type: TYPES.VARINT,
+        value: "1"
+    });   
+    // field 2: varint
+    expect(result.parts[2]).toEqual({
+        byteRange: [3, 5],
+        index: 3,
+        type: TYPES.VARINT,
+        value: "2"
+    });  
+})
+
+it("decode length delimited - single message with leftover", () => {
+    const result = decodeProto(parseInput("0408011802123456"), true);
+
+    expect(result.parts).toHaveLength(4);
+
+    // length delimiter
+    expect(result.parts[0]).toEqual({
+        byteRange: [0, 1],
+        index: -1,
+        type: TYPES.MSG_LEN_DELIMITER,
+        value: 4
+    });
+     // field 1: varint
+     expect(result.parts[1]).toEqual({
+        byteRange: [1, 3],
+        index: 1,
+        type: TYPES.VARINT,
+        value: "1"
+    });   
+    // field 2: varint
+    expect(result.parts[2]).toEqual({
+        byteRange: [3, 5],
+        index: 3,
+        type: TYPES.VARINT,
+        value: "2"
+    });
+
+    // length delimiter in leftover data 
+    // (there is no way to know if this is a delimiter or not except if we assume that the message must be complete)
+    expect(result.parts[3]).toEqual({
+        byteRange: [5, 6],
+        index: -1,
+        type: TYPES.MSG_LEN_DELIMITER,
+        value: 18
+    });
+
+    expect(result.leftOver.toString("hex")).toEqual("123456");
+})
+
+it("decode length delimited - multiple message", () => {
+    const result = decodeProto(parseInput("04 08 01 18 02 02 28 07"), true);
+
+    expect(result.parts).toHaveLength(5);
+    expect(result.leftOver.toString("hex")).toEqual("");
+
+    // length delimiter
+    expect(result.parts[0]).toEqual({
+        byteRange: [0, 1],
+        index: -1,
+        type: TYPES.MSG_LEN_DELIMITER,
+        value: 4
+    });
+     // field num 1: varint
+     expect(result.parts[1]).toEqual({
+        byteRange: [1, 3],
+        index: 1,
+        type: TYPES.VARINT,
+        value: "1"
+    });   
+    // field 2: varint
+    expect(result.parts[2]).toEqual({
+        byteRange: [3, 5],
+        index: 3,
+        type: TYPES.VARINT,
+        value: "2"
+    }); 
+
+    // length delimiter 2
+    expect(result.parts[3]).toEqual({
+        byteRange: [5, 6],
+        index: -1,
+        type: TYPES.MSG_LEN_DELIMITER,
+        value: 2
+    });
+     // field 1: varint
+     expect(result.parts[4]).toEqual({
+        byteRange: [6, 8],
+        index: 5,
+        type: TYPES.VARINT,
+        value: "7"
+    });
+})
+
