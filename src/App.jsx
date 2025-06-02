@@ -60,6 +60,7 @@ function App() {
             placeholder="Paste Protobuf or gRPC request as hex or base64"
             onChange={onHexChanged}
             value={hex}
+            data-testid="input-hex"
           />
           <Input
             action={{
@@ -78,13 +79,14 @@ function App() {
         <Form.Group>
           <Checkbox
             label="parse varint length delimited input"
+            data-testid="parse-delimited-checkbox"
             onChange={(evt, data) => {
               setParseDelimited(data.checked);
             }}
             checked={parseDelimited}
           />
         </Form.Group>
-        <Form.Button primary fluid onClick={onSubmit}>
+        <Form.Button primary fluid onClick={onSubmit} data-testid="decode-button">
           Decode
         </Form.Button>
       </Form>

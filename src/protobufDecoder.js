@@ -84,7 +84,6 @@ export function decodeProto(buffer, parseDelimited) {
       reader.checkpoint();
 
       if (parseDelimited && protoBufMsgEnd === reader.offset) {
-        console.log("found delimiter at " + reader.offset);
         const byteRange = [reader.offset];
         protoBufMsgLength = parseInt(reader.readVarInt().toString());
         protoBufMsgEnd = reader.offset + protoBufMsgLength;
