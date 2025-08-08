@@ -6,6 +6,7 @@
     "start": "vite",
     "build": "vite build --outDir build",
     "test": "vitest --run --globals --reporter verbose",
+    "test:coverage": "vitest --run --globals --reporter verbose --coverage",
     "test:watch": "vitest --globals --reporter verbose --ui"
   },
   "eslintConfig": {
