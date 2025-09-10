@@ -37,7 +37,7 @@
     "lint-staged": ">=8 <=15",
     "prettier": "1.18.2",
     "react-dom": "^18.3.0",
-    "vite": "^6.2.1",
+    "vite": "^6.3.6",
     "vitest": "^3.0.8"
   },
   "husky": {
