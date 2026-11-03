@@ -2,7 +2,8 @@ import {
   decodeFixed32,
   decodeFixed64,
   decodeVarintParts,
-  decodeStringOrBytes
+  decodeStringOrBytes,
+  decodeLenDelim
 } from "./protobufPartDecoder";
 import { parseInput } from "./hexUtils";
 
@@ -103,5 +104,23 @@ describe("decodeStringOrBytes", () => {
     const result = decodeStringOrBytes(empty);
     expect(result.value).toEqual("");
     expect(result.type).toEqual("string|bytes");
+  });
+});
+
+describe("decodeLenDelim", () => {
+  it("decode nested protobuf", () => {
+    const result = decodeLenDelim(parseInput("0a0161"));
+    expect(result.type).toEqual("protobuf");
+    expect(result.value.parts).toHaveLength(1);
+  });
+
+  it("decode string", () => {
+    const result = decodeLenDelim(Buffer.from("hello"));
+    expect(result).toEqual({ type: "string", value: "hello" });
+  });
+
+  it("decode empty value", () => {
+    const result = decodeLenDelim(Buffer.from([]));
+    expect(result).toEqual({ type: "string|bytes", value: "" });
   });
 });

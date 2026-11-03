@@ -1,10 +1,10 @@
 import React from "react";
 import { Table } from "semantic-ui-react";
-import { decodeProto, TYPES, typeToString } from "./protobufDecoder";
+import { TYPES, typeToString } from "./protobufDecoder";
 import {
   decodeFixed32,
   decodeFixed64,
-  decodeStringOrBytes,
+  decodeLenDelim,
   decodeVarintParts
 } from "./protobufPartDecoder";
 import ProtobufDisplay from "./ProtobufDisplay";
@@ -50,17 +50,16 @@ function ProtobufFixed32Part(props) {
   ));
 }
 
-function getProtobufPart(part) {
+export function getProtobufPart(part) {
   switch (part.type) {
     case TYPES.VARINT:
       return [<ProtobufVarintPart value={part.value} />];
     case TYPES.LENDELIM:
       // TODO: Support repeated field
-      let decoded = decodeProto(part.value);
-      if (part.value.length > 0 && decoded.leftOver.length === 0) {
-        return [<ProtobufDisplay value={decoded} />, "protobuf"];
+      const decoded = decodeLenDelim(part.value);
+      if (decoded.type === "protobuf") {
+        return [<ProtobufDisplay value={decoded.value} />, "protobuf"];
       } else {
-        decoded = decodeStringOrBytes(part.value);
         return [<ProtobufStringOrBytesPart value={decoded} />, decoded.type];
       }
     case TYPES.FIXED64:

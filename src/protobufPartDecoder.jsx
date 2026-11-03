@@ -1,6 +1,7 @@
 import JSBI from "jsbi";
 import { bufferLeToBeHex, bufferToPrettyHex } from "./hexUtils";
 import { interpretAsSignedType, interpretAsTwosComplement } from "./intUtils";
+import { decodeProto } from "./protobufDecoder";
 
 export function decodeFixed32(value) {
   const floatValue = value.readFloatLE(0);
@@ -68,4 +69,12 @@ export function decodeStringOrBytes(value) {
   } catch (e) {
     return { type: "bytes", value: bufferToPrettyHex(value) };
   }
+}
+
+export function decodeLenDelim(value) {
+  const decoded = decodeProto(value);
+  if (value.length > 0 && decoded.leftOver.length === 0) {
+    return { type: "protobuf", value: decoded };
+  }
+  return decodeStringOrBytes(value);
 }

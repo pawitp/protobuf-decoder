@@ -30,4 +30,52 @@ describe('App', () => {
         
         await screen.getByText('Result')
     })
+
+    it('labels the second input', () => {
+        render(<App />)
+        screen.getByText('Second input (B), optional, for Decode & Diff')
+    })
+
+    it('disables diff button until both inputs are filled', () => {
+        render(<App />)
+        const diffButton = screen.getByTestId('diff-button')
+        expect(diffButton.disabled).toBe(true)
+
+        fireEvent.change(screen.getByTestId('input-hex'), { target: { value: '0801' } })
+        expect(diffButton.disabled).toBe(true)
+
+        fireEvent.change(screen.getByTestId('input-hex-b'), { target: { value: '0802' } })
+        expect(diffButton.disabled).toBe(false)
+    })
+
+    it('renders diff table when both inputs are given', () => {
+        const { container } = render(<App />)
+        fireEvent.change(screen.getByTestId('input-hex'), { target: { value: '0801' } })
+        fireEvent.change(screen.getByTestId('input-hex-b'), { target: { value: '0802' } })
+        fireEvent.click(screen.getByTestId('diff-button'))
+
+        screen.getByText('Diff')
+        expect(container.querySelectorAll('tr.warning')).toHaveLength(1)
+        expect(screen.getByTestId('input-hex-b').value).toBe('08 02')
+    })
+
+    it('renders diff with an invalid second input', () => {
+        render(<App />)
+        fireEvent.change(screen.getByTestId('input-hex'), { target: { value: '0801' } })
+        fireEvent.change(screen.getByTestId('input-hex-b'), { target: { value: 'ffff' } })
+        fireEvent.click(screen.getByTestId('diff-button'))
+
+        screen.getByText('Left over bytes (B): ff ff')
+    })
+
+    it('shows single result when decoding after a diff', () => {
+        render(<App />)
+        fireEvent.change(screen.getByTestId('input-hex'), { target: { value: '0801' } })
+        fireEvent.change(screen.getByTestId('input-hex-b'), { target: { value: '0802' } })
+        fireEvent.click(screen.getByTestId('diff-button'))
+        fireEvent.click(screen.getByTestId('decode-button'))
+
+        screen.getByText('Result')
+        expect(screen.queryByText('Diff')).toBeNull()
+    })
   })
